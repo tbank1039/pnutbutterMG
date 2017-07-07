@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post("login", "ApiController@login");
 
-Route::middleware(["jwt.auth", "jwt.refresh"])->group(function() {
+Route::middleware(["jwt.auth"])->group(function() {
 	Route::get("user", "ApiController@getLoggedInUser");
+    Route::get("campaigns", "ApiController@getAssociatedCampaigns");
 });

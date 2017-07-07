@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Campaign;
 
 use App\User;
 
@@ -32,5 +33,13 @@ class ApiController extends Controller
 
         // the token is valid and we have found the user via the sub claim
         return response()->json(compact('user'));
+    }
+
+    public function getAssociatedCampaigns() {
+        $user = User::find(JWTAuth::parseToken()->authenticate()['id']);
+
+        $campaigns = Campaign::with("gm")->associatedToUser($user)->get();
+
+        return response()->json($campaigns);
     }
 }
